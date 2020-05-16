@@ -19,7 +19,7 @@ connection.once('open', () => {
 })
 
 //add routes here
-const MainRouter = require('./backend/routes/main');
+const MainRouter = require('./routes/main');
 app.use('/main', MainRouter);
 
 app.listen(5000, () => {
