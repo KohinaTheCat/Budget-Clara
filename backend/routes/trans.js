@@ -1,6 +1,11 @@
+/*
+for transaction types
+*/
+
 const router = require("express").Router();
 let Trans = require("../models/trans.model");
 
+//add a transaction
 router.post("/", (req, res) => {
   const essential = req.body.essential;
   const amount = parseFloat(req.body.amount);
@@ -22,6 +27,7 @@ router.post("/", (req, res) => {
     .catch((err) => res.json(err));
 });
 
+//get a transaction
 router.get("/", (req, res) => {
   Trans.find()
     .sort({ when: "desc" })
@@ -29,6 +35,7 @@ router.get("/", (req, res) => {
     .catch((err) => res.json(err));
 });
 
+//get sum
 router.get("/total", (req, res) => {
   Trans
   .aggregate([{
@@ -37,6 +44,7 @@ router.get("/total", (req, res) => {
   .catch((err) => res.json(err));
 });
 
+//edit transaction
 router.route("/:id").post((req, res) => {
   Trans.findById(req.params.id)
     .then((v) => {
@@ -53,6 +61,8 @@ router.route("/:id").post((req, res) => {
     .catch((err) => res.json(err));
 });
 
+
+//delete transaction
 router.delete("/:id", (req, res) => {
   Trans.findByIdAndDelete(req.params.id)
     .then(() => res.json("deleted."))

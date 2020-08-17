@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 
 function List(props) {
+    //replace with redux
   let [when, setWhen] = useState(Date.parse(props.when));
   let [amount, setAmount] = useState(props.amount);
   let [what, setWhat] = useState(props.what);
@@ -36,6 +37,7 @@ function List(props) {
     </>
   );
 
+  //figure out way to reduce code duplication
   let onAmountChange = (e) => {
     setAmount(e.target.value);
   };

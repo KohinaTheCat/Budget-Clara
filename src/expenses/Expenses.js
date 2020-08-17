@@ -22,6 +22,7 @@ export class Expenses extends Component {
     this.deleteItem = this.deleteItem.bind(this);
     this.addItem = this.addItem.bind(this);
 
+    //REPLACE WITH REDUX
     this.state = {
       list: [],
       amount: 0,
@@ -34,6 +35,10 @@ export class Expenses extends Component {
   }
 
   componentDidMount() {
+    this.update();
+  }
+
+  update() {
     axios
       .get("http://localhost:5000/transactions")
       .then((res) => {
@@ -41,29 +46,13 @@ export class Expenses extends Component {
       })
       .catch((err) => console.log(err));
 
+    //call to get total amount from db
     axios
       .get("http://localhost:5000/transactions/total")
       .then((res) => {
         this.setState({ total: res.data[0].total });
       })
       .catch((err) => console.log(err));
-  }
-
-  displayList() {
-    return this.state.list.map((current) => {
-      return (
-        <List
-          key={current._id}
-          amount={current.amount}
-          where={current.where}
-          essential={current.essential}
-          what={current.what}
-          when={current.when}
-          id={current._id}
-          deleteItem={this.deleteItem}
-        />
-      );
-    });
   }
 
   deleteItem(id) {
@@ -85,11 +74,28 @@ export class Expenses extends Component {
 
     axios
       .post("http://localhost:5000/transactions/", newItem)
-      .then((res) => console.log(res.data));
-
-    //find a way for this to automatcally reload b/c we dont have id of this item lolz
+      .then((res) => console.log(res.data))
+      .then((res) => this.update());
   }
 
+  displayList() {
+    return this.state.list.map((current) => {
+      return (
+        <List
+          key={current._id}
+          amount={current.amount}
+          where={current.where}
+          essential={current.essential}
+          what={current.what}
+          when={current.when}
+          id={current._id}
+          deleteItem={this.deleteItem}
+        />
+      );
+    });
+  }
+
+  //ADD REDUX
   onAmountChange = (e) => {
     this.setState({ amount: e.target.value });
   };

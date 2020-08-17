@@ -1,3 +1,7 @@
+/*
+boiler
+*/
+
 const router = require('express').Router();
 let Main = require('../models/main.model');
 
@@ -29,12 +33,14 @@ router.route('/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error ' + err))
 })
 
+//deleting transaction
 router.route('/:id').delete((req, res) => {
     Main.findByIdAndDelete(req.params.id)
     .then(() => res.json('deleted'))
     .catch(err => res.status(400).json('Error ' + err))
 })
 
+//editing transaction
 router.route('/update/:id').post((req, res) =>{
     Main.findById(req.params.id)
     .then(v =>{
