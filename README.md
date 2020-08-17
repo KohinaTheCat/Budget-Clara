@@ -1,3 +1,3 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-[work in progress] | trying to learn the MERN stack lol.
+[work in progress] | trying to learn the MERN stack lol
