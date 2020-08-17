@@ -19,8 +19,8 @@ connection.once('open', () => {
 })
 
 //add routes here
-const MainRouter = require('./routes/main');
-app.use('/main', MainRouter);
+const TransRouter = require('./routes/trans');
+app.use('/transactions', TransRouter);
 
 app.listen(5000, () => {
     console.log(`server is running on port: 5000`);

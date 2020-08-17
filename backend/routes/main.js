@@ -1,6 +1,10 @@
 const router = require('express').Router();
 let Main = require('../models/main.model');
 
+var multer = require("multer");
+var storage = multer.memoryStorage()
+var upload = multer({ storage: storage })
+
 router.route('/').get((req, res) => {
     Main.find()
     .then(v => res.json(v))
