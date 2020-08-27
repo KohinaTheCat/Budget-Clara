@@ -1,4 +1,4 @@
-//use: npm server.js -> to run the server
+//use: npm start server.js -> to run the server
 
 const express = require('express');
 const cors = require('cors');
