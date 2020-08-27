@@ -3,7 +3,7 @@ import {
   Card,
   Typography,
   Checkbox,
-  TableBody,
+  IconButton,
   TableCell,
   TableContainer,
   TableHead,
@@ -34,9 +34,9 @@ export class Expenses extends Component {
     //REPLACE WITH REDUX
     this.state = {
       list: [],
-      amount: 0,
-      where: "home",
-      what: "nothing",
+      amount: null,
+      where: "",
+      what: "",
       when: new Date(),
       essential: "no",
       total: 0,
@@ -76,6 +76,19 @@ export class Expenses extends Component {
     });
   }
 
+  resetTextFields() {
+    this.setState({
+      amount: "",
+      where: "",
+      what: "",
+      when: new Date(),
+      essential: "no",
+      total: 0,
+      page: 0,
+      count: 0,
+    });
+  }
+
   addItem() {
     const newItem = {
       when: this.state.when,
@@ -88,24 +101,27 @@ export class Expenses extends Component {
     axios
       .post("http://localhost:5000/transactions/", newItem)
       .then((res) => console.log(res.data))
-      .then((res) => this.update());
+      .then(this.update())
+      .then(this.resetTextFields());
   }
 
   displayList() {
-    return this.state.list.slice(this.state.page * 5, this.state.page * 5 + 5).map((current, i) => {
-      return (
-        <List
-          key={current._id}
-          amount={current.amount}
-          where={current.where}
-          essential={current.essential}
-          what={current.what}
-          when={current.when}
-          id={current._id}
-          deleteItem={this.deleteItem}
-        />
-      );
-    });
+    return this.state.list
+      .slice(this.state.page * 5, this.state.page * 5 + 5)
+      .map((current, i) => {
+        return (
+          <List
+            key={current._id}
+            amount={current.amount}
+            where={current.where}
+            essential={current.essential}
+            what={current.what}
+            when={current.when}
+            id={current._id}
+            deleteItem={this.deleteItem}
+          />
+        );
+      });
   }
 
   onEssentialChange = (e) => {
@@ -120,12 +136,12 @@ export class Expenses extends Component {
     this.setState({ page: newPage });
   };
 
-  TablePaginationActions = () =>{
-    this.setState({page: this.state.page + 1});
+  TablePaginationActions = () => {
+    this.setState({ page: this.state.page + 1 });
   };
 
   render() {
-    // to format the date picker
+    //    EDIT: DEF. PUT THIS INTO A REUSABLE COMPONENT.
     const ExampleCustomInput = ({ value, onClick }) => (
       <Button variant="contained" color="primary" onClick={onClick}>
         {value}
@@ -140,34 +156,25 @@ export class Expenses extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Date
-                  </Typography>
+                  <b>Date</b>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Amount
-                  </Typography>
+                <TableCell>
+                  <b>Amount</b>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Place
-                  </Typography>
+                <TableCell>
+                  <b>Place</b>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Description
-                  </Typography>
+                <TableCell>
+                  <b>Description</b>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Essential
-                  </Typography>
+                <TableCell>
+                  <b>Essential</b>
                 </TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
             {/* add additional transaction */}
+            {/* EDIT: SEE IF THIS CAN BE REDUCED TO A COMPONENT */}
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -177,28 +184,18 @@ export class Expenses extends Component {
                     customInput={<ExampleCustomInput />}
                   />
                 </TableCell>
-                <TableCell align="center">
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    label="$"
-                    onChange={(e) => this.setState({ amount: e.target.value })}
-                  ></TextField>
-                </TableCell>
-                <TableCell align="center">
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    onChange={(e) => this.setState({ where: e.target.value })}
-                  ></TextField>
-                </TableCell>
-                <TableCell align="center">
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    onChange={(e) => this.setState({ what: e.target.value })}
-                  ></TextField>
-                </TableCell>
+                {["amount", "where", "what"].map((name) => (
+                  <TableCell align="center">
+                    <TextField
+                      id="outlined-basic"
+                      variant="outlined"
+                      value={this.state[name]}
+                      onChange={(e) =>
+                        this.setState({ [name]: e.target.value })
+                      }
+                    ></TextField>
+                  </TableCell>
+                ))}
                 <TableCell align="center">
                   <Checkbox
                     style={{ color: green[500] }}
@@ -206,9 +203,9 @@ export class Expenses extends Component {
                   ></Checkbox>
                 </TableCell>
                 <TableCell align="center">
-                  <Button onClick={this.addItem}>
+                  <IconButton onClick={this.addItem}>
                     <AddCircleSharpIcon color="primary"></AddCircleSharpIcon>
-                  </Button>
+                  </IconButton>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -236,8 +233,8 @@ export class Expenses extends Component {
                     inputProps: { "aria-label": "rows per page" },
                     native: true,
                   }}
-                    onChangePage={this.handleChangePage}
-                    // ActionsComponent={this.TablePaginationActions}
+                  onChangePage={this.handleChangePage}
+                  // ActionsComponent={this.TablePaginationActions}
                 />
               </TableRow>
             </TableFooter>

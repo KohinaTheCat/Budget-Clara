@@ -4,7 +4,7 @@ import {
   TableRow,
   TableCell,
   TextField,
-  Icon,
+  IconButton,
   Button,
 } from "@material-ui/core";
 import axios from "axios";
@@ -17,8 +17,7 @@ import { green } from "@material-ui/core/colors";
 import ClearSharpIcon from "@material-ui/icons/ClearSharp";
 import DeleteSharpIcon from "@material-ui/icons/DeleteSharp";
 
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 /*
     Display each individual transaction, and check for change.
@@ -42,7 +41,7 @@ function List(props) {
     <>
       <TableCell>{props.when.substring(0, 10)}</TableCell>
       <TableCell>
-        {amount < 0 ? "-" : ""}${Math.abs(amount.toFixed(2))}
+        {amount < 0 ? "-" : ""}${Math.abs(parseFloat(amount).toFixed(2))}
       </TableCell>
       <TableCell>{where}</TableCell>
       <TableCell>{what}</TableCell>
@@ -54,12 +53,12 @@ function List(props) {
         )}
       </TableCell>
       <TableCell align="center" style={{ width: "80px" }}>
-        <Button>
+        <IconButton>
           <EditSharpIcon onClick={onEditChange} />
-        </Button>
-        <Button>
+        </IconButton>
+        <IconButton>
           <DeleteSharpIcon onClick={() => props.deleteItem(props.id)} />
-        </Button>
+        </IconButton>
       </TableCell>
     </>
   );
@@ -88,10 +87,20 @@ function List(props) {
       .catch((err) => console.log(err));
   };
 
+  const ExampleCustomInput = ({ value, onClick }) => (
+    <Button variant="contained" color="primary" onClick={onClick}>
+      {value}
+    </Button>
+  );
+
   let editCells = (
     <>
       <TableCell>
-        <DatePicker selected={when} onChange={(date) => setWhen(date)} />
+        <DatePicker
+          selected={when}
+          onChange={(date) => this.setWhen(date)}
+          customInput={<ExampleCustomInput />}
+        />
       </TableCell>
 
       <TableCell align="center">
@@ -125,9 +134,7 @@ function List(props) {
       </TableCell>
 
       <TableCell align="center">
-        <a href="#" type="submit" onClick={callEdit}>
-          update
-        </a>
+        <ArrowForwardIosIcon onClick={callEdit} />
       </TableCell>
     </>
   );
