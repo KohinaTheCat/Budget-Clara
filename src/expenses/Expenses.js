@@ -5,6 +5,8 @@ import {
   Checkbox,
   IconButton,
   TableCell,
+  TableBody,
+  Table,
   TableContainer,
   TableHead,
   TableRow,
@@ -20,6 +22,7 @@ import axios from "axios";
 import List from "../list/List";
 import { green } from "@material-ui/core/colors";
 import "./expenses.css";
+import Graph from "../graph/Graph";
 
 /*
     Getting data from database and displaying it in a table.
@@ -34,12 +37,14 @@ export class Expenses extends Component {
     //REPLACE WITH REDUX
     this.state = {
       list: [],
-      amount: null,
+      amount: 0,
       where: "",
       what: "",
       when: new Date(),
       essential: "no",
       total: 0,
+      gain: 0,
+      loss: 0,
       page: 0,
       count: 0,
     };
@@ -61,7 +66,7 @@ export class Expenses extends Component {
     axios
       .get("http://localhost:5000/transactions/total")
       .then((res) => {
-        this.setState({ total: res.data[0].total });
+        this.setState({ total: res.data[0].total, gain: res.data[0].gain, loss: res.data[0].loss });
       })
       .catch((err) => console.log(err));
   }
@@ -70,10 +75,6 @@ export class Expenses extends Component {
     axios
       .delete("http://localhost:5000/transactions/" + id)
       .then((res) => this.update());
-
-    this.setState({
-      list: this.state.list.filter((i) => i._id !== id),
-    });
   }
 
   resetTextFields() {
@@ -81,11 +82,6 @@ export class Expenses extends Component {
       amount: "",
       where: "",
       what: "",
-      when: new Date(),
-      essential: "no",
-      total: 0,
-      page: 0,
-      count: 0,
     });
   }
 
@@ -97,12 +93,11 @@ export class Expenses extends Component {
       what: this.state.what,
       essential: this.state.essential,
     };
-    console.log(newItem);
+
     axios
       .post("http://localhost:5000/transactions/", newItem)
-      .then((res) => console.log(res.data))
-      .then(this.update())
-      .then(this.resetTextFields());
+      .then(this.resetTextFields())
+      .then((res) => this.update());
   }
 
   displayList() {
@@ -149,98 +144,105 @@ export class Expenses extends Component {
     );
 
     return (
-      <div className="background">
+      <Card className="background">
         <Card className="container">
           <TableContainer component={Card}>
-            {/* top labels */}
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <b>Date</b>
-                </TableCell>
-                <TableCell>
-                  <b>Amount</b>
-                </TableCell>
-                <TableCell>
-                  <b>Place</b>
-                </TableCell>
-                <TableCell>
-                  <b>Description</b>
-                </TableCell>
-                <TableCell>
-                  <b>Essential</b>
-                </TableCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            {/* add additional transaction */}
-            {/* EDIT: SEE IF THIS CAN BE REDUCED TO A COMPONENT */}
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <DatePicker
-                    selected={this.state.when}
-                    onChange={(date) => this.setState({ when: date })}
-                    customInput={<ExampleCustomInput />}
-                  />
-                </TableCell>
-                {["amount", "where", "what"].map((name) => (
-                  <TableCell align="center">
-                    <TextField
-                      id="outlined-basic"
-                      variant="outlined"
-                      value={this.state[name]}
-                      onChange={(e) =>
-                        this.setState({ [name]: e.target.value })
-                      }
-                    ></TextField>
+            <Table>
+              {/* top labels */}
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <b>Date</b>
                   </TableCell>
-                ))}
-                <TableCell align="center">
-                  <Checkbox
-                    style={{ color: green[500] }}
-                    onChange={this.onEssentialChange}
-                  ></Checkbox>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton onClick={this.addItem}>
-                    <AddCircleSharpIcon color="primary"></AddCircleSharpIcon>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            {/* total from db */}
-            <TableRow>
-              <TableCell>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Total: {this.state.total < 0 ? "-" : ""}$
-                  {Math.abs(this.state.total.toFixed(2))}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            {/* display all transactions */}
-            {this.displayList()}
-            {/* page control */}
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5]}
-                  colSpan={6}
-                  count={this.state.list.length} //total amount of transactions
-                  rowsPerPage={5}
-                  page={this.state.page} //page you are on
-                  SelectProps={{
-                    inputProps: { "aria-label": "rows per page" },
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  // ActionsComponent={this.TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
+                  <TableCell>
+                    <b>Amount</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Place</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Description</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Essential</b>
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+              {/* add additional transaction */}
+              {/* EDIT: SEE IF THIS CAN BE REDUCED TO A COMPONENT */}
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <DatePicker
+                      selected={this.state.when}
+                      onChange={(date) => this.setState({ when: date })}
+                      customInput={<ExampleCustomInput />}
+                    />
+                  </TableCell>
+                  {["amount", "where", "what"].map((name) => (
+                    <TableCell key={name + "1"} align="center">
+                      <TextField
+                        key={name + "2"}
+                        id="outlined-basic"
+                        variant="outlined"
+                        value={this.state[name]}
+                        onChange={(e) =>
+                          this.setState({ [name]: e.target.value })
+                        }
+                      ></TextField>
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
+                    <Checkbox
+                      style={{ color: green[500] }}
+                      onChange={this.onEssentialChange}
+                    ></Checkbox>
+                  </TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={this.addItem}>
+                      <AddCircleSharpIcon color="primary"></AddCircleSharpIcon>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              {/* total from db */}
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      Total: {this.state.total < 0 ? "-" : ""}$
+                      {Math.abs(this.state.total.toFixed(2))}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                {/* display all transactions */}
+                {this.displayList()}
+              </TableBody>
+              {/* page control */}
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5]}
+                    colSpan={6}
+                    count={this.state.list.length} //total amount of transactions
+                    rowsPerPage={5}
+                    page={this.state.page} //page you are on
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true,
+                    }}
+                    onChangePage={this.handleChangePage}
+                    // ActionsComponent={this.TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
           </TableContainer>
         </Card>
-      </div>
+
+        <Graph total={this.state.total} gain={this.state.gain} loss={this.state.loss}></Graph>
+      </Card>
     );
   }
 }

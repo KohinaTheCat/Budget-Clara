@@ -37,11 +37,19 @@ router.get("/", (req, res) => {
 
 //get sum
 router.get("/total", (req, res) => {
-  Trans
-  .aggregate([{
-      $group: {_id: null, total: {$sum: "$amount"}}
-  }]).then((v) => res.json(v))
-  .catch((err) => res.json(err));
+  Trans.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$amount" },
+        gain: { $sum: { $cond: [{ $gt: ["$amount", 0] }, "$amount", 0] } },
+        loss: { $sum: { $cond: [{ $lt: ["$amount", 0] }, "$amount", 0] } },
+      },
+      //{ $cond: [ <boolean-expression>, <true-case>, <false-case> ] }
+    },
+  ])
+    .then((v) => res.json(v))
+    .catch((err) => res.json(err));
 });
 
 //edit transaction
@@ -60,7 +68,6 @@ router.route("/:id").post((req, res) => {
     })
     .catch((err) => res.json(err));
 });
-
 
 //delete transaction
 router.delete("/:id", (req, res) => {

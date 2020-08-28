@@ -38,7 +38,7 @@ function List(props) {
   };
 
   let cells = (
-    <>
+    <TableRow id={id}>
       <TableCell>{props.when.substring(0, 10)}</TableCell>
       <TableCell>
         {amount < 0 ? "-" : ""}${Math.abs(parseFloat(amount).toFixed(2))}
@@ -53,14 +53,14 @@ function List(props) {
         )}
       </TableCell>
       <TableCell align="center" style={{ width: "80px" }}>
-        <IconButton>
-          <EditSharpIcon onClick={onEditChange} />
+        <IconButton  onClick={onEditChange} >
+          <EditSharpIcon/>
         </IconButton>
-        <IconButton>
-          <DeleteSharpIcon onClick={() => props.deleteItem(props.id)} />
+        <IconButton  onClick={() => props.deleteItem(props.id)} >
+          <DeleteSharpIcon/>
         </IconButton>
       </TableCell>
-    </>
+    </TableRow>
   );
 
   let onEssentialChange = (e) => {
@@ -94,7 +94,7 @@ function List(props) {
   );
 
   let editCells = (
-    <>
+    <TableRow id={id}>
       <TableCell>
         <DatePicker
           selected={when}
@@ -134,20 +134,14 @@ function List(props) {
       </TableCell>
 
       <TableCell align="center">
-        <ArrowForwardIosIcon onClick={callEdit} />
+        <IconButton onClick={callEdit}>
+          <ArrowForwardIosIcon />
+        </IconButton>
       </TableCell>
-    </>
+    </TableRow>
   );
 
-  return parseInt(props.amount) < 0 ? (
-    <TableRow id={id} /*style={{ backgroundColor: "#fcedf0" }}*/>
-      {edit ? editCells : cells}
-    </TableRow>
-  ) : (
-    <TableRow id={id} /*style={{ backgroundColor: "#f0fffa" }} */>
-      {edit ? editCells : cells}
-    </TableRow>
-  );
+  return (<>{edit ? editCells : cells}</>);
 }
 
 export default List;
