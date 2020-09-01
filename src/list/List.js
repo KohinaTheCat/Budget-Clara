@@ -82,8 +82,8 @@ function List(props) {
     };
     axios
       .post("http://localhost:5000/transactions/" + id, newItem)
-      .then((res) => console.log(res.data))
       .then(onEditChange())
+    //   .then((res) => update())
       .catch((err) => console.log(err));
   };
 

@@ -37,7 +37,7 @@ export class Expenses extends Component {
     //REPLACE WITH REDUX
     this.state = {
       list: [],
-      amount: 0,
+      amount: "",
       where: "",
       what: "",
       when: new Date(),
