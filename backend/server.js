@@ -37,12 +37,12 @@ app.use("/transactions", TransRouter);
 
 const PORT = process.env.PORT || 5000;
 
-// if (process.env.NODE_ENV === "production") {
-//   //know if app is on heroku
-//   //put the client into server
-//   //steps to run when on heroku
-//   app.use(express.static("../build"));
-// }
+if (process.env.NODE_ENV === "production") {
+  //know if app is on heroku
+  //put the client into server
+  //steps to run when on heroku
+  app.use(express.static("../build"));
+}
 
 const path = require('path')// Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '/../build')))// Anything that doesn't match the above, send back index.html
