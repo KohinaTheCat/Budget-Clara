@@ -23,9 +23,12 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm run build",
+    "install": "cd client && npm install",
     "start": "node backend/server.js",
-    "heroku-postbuild": "npm install && npm run build"
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "engines": {
     "node": "12.16.3"
