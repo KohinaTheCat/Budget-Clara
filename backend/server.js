@@ -30,6 +30,14 @@ const TransRouter = require('./routes/trans');
 app.use('/transactions', TransRouter);
 //if anyone goes to /trans its gonna load everything in transaction router
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log(`server is running on port: 5000`);
+const PORT = process.env.PORT || 5000;
+
+if(process.env.NODE_ENV === 'production'){ //know if app is on heroku
+    //put the client into server
+    //steps to run when on heroku
+    app.use(express.static('../build'))
+}
+
+app.listen(PORT, () => {
+    console.log(`server is running on port: ${PORT}`);
 })
