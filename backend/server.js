@@ -30,6 +30,6 @@ const TransRouter = require('./routes/trans');
 app.use('/transactions', TransRouter);
 //if anyone goes to /trans its gonna load everything in transaction router
 
-app.listen(5000, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log(`server is running on port: 5000`);
 })
