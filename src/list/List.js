@@ -82,7 +82,7 @@ function List(props) {
     };
     axios
       .post(
-        "http://localhost:" + process.env.PORT + "/transactions/" + id,
+        "/transactions/" + id,
         newItem
       )
       .then(onEditChange())

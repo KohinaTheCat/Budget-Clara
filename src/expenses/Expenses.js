@@ -56,7 +56,7 @@ export class Expenses extends Component {
 
   update() {
     axios
-      .get("http://localhost:"+ process.env.PORT + "/transactions")
+      .get("/transactions")
       .then((res) => {
         this.setState({ list: res.data });
       })
@@ -64,7 +64,7 @@ export class Expenses extends Component {
 
     //call to get total amount from db
     axios
-      .get("http://localhost:"+ process.env.PORT + "/transactions/total")
+      .get("/transactions/total")
       .then((res) => {
         this.setState({ total: res.data[0].total, gain: res.data[0].gain, loss: res.data[0].loss });
       })
@@ -73,7 +73,7 @@ export class Expenses extends Component {
 
   deleteItem(id) {
     axios
-      .delete("http://localhost:5000/transactions/" + id)
+      .delete("/transactions/" + id)
       .then((res) => this.update());
   }
 
@@ -95,7 +95,7 @@ export class Expenses extends Component {
     };
 
     axios
-      .post("http://localhost:5000/transactions/", newItem)
+      .post("/transactions/", newItem)
       .then(this.resetTextFields())
       .then((res) => this.update());
   }
