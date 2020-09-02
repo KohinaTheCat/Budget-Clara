@@ -53,11 +53,11 @@ function List(props) {
         )}
       </TableCell>
       <TableCell align="center" style={{ width: "80px" }}>
-        <IconButton  onClick={onEditChange} >
-          <EditSharpIcon/>
+        <IconButton onClick={onEditChange}>
+          <EditSharpIcon />
         </IconButton>
-        <IconButton  onClick={() => props.deleteItem(props.id)} >
-          <DeleteSharpIcon/>
+        <IconButton onClick={() => props.deleteItem(props.id)}>
+          <DeleteSharpIcon />
         </IconButton>
       </TableCell>
     </TableRow>
@@ -81,9 +81,12 @@ function List(props) {
       id: id,
     };
     axios
-      .post("http://localhost:5000/transactions/" + id, newItem)
+      .post(
+        "http://localhost:" + process.env.PORT + "/transactions/" + id,
+        newItem
+      )
       .then(onEditChange())
-    //   .then((res) => update())
+      //   .then((res) => update())
       .catch((err) => console.log(err));
   };
 
@@ -141,7 +144,7 @@ function List(props) {
     </TableRow>
   );
 
-  return (<>{edit ? editCells : cells}</>);
+  return <>{edit ? editCells : cells}</>;
 }
 
 export default List;

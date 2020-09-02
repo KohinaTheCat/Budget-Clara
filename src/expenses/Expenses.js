@@ -56,7 +56,7 @@ export class Expenses extends Component {
 
   update() {
     axios
-      .get("http://localhost:5000/transactions")
+      .get("http://localhost:"+ process.env.PORT + "/transactions")
       .then((res) => {
         this.setState({ list: res.data });
       })
@@ -64,7 +64,7 @@ export class Expenses extends Component {
 
     //call to get total amount from db
     axios
-      .get("http://localhost:5000/transactions/total")
+      .get("http://localhost:"+ process.env.PORT + "/transactions/total")
       .then((res) => {
         this.setState({ total: res.data[0].total, gain: res.data[0].gain, loss: res.data[0].loss });
       })
