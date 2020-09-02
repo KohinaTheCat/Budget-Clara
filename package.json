@@ -24,9 +24,7 @@
   },
   "scripts": {
     "start": "node backend/server.js",
-    "build": "npm install && npm run build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npm install && npm run build"
   },
   "engines": {
     "node": "12.16.3"
@@ -45,6 +43,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:5000"
+  }
 }
