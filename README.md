@@ -1,7 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 [work in progress] | trying to learn the MERN stack lol
 
+[painfully] deployed at https://budget-clara.herokuapp.com/
 
-node server.js
-npm start
+-> lots of work still to be done
