@@ -14,8 +14,7 @@ app.use(cors());
 app.use(express.json());
 //so we can parse json
 
-const uri =
-  "mongodb+srv://admin:rycbar123@mern-ex-qor5k.gcp.mongodb.net/test?retryWrites=true&w=majority"; /*process.env.ATLAS_URI*/
+const uri =process.env.ATLAS_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
