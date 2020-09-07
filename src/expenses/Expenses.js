@@ -120,10 +120,11 @@ export class Expenses extends Component {
   }
 
   onEssentialChange = (e) => {
+      console.log(e)
     if (e.target.checked) {
-      this.setState({ essential: "no" });
-    } else {
       this.setState({ essential: "yes" });
+    } else {
+      this.setState({ essential: "no" });
     }
   };
 

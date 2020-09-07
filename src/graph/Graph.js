@@ -13,8 +13,6 @@ export class Graph extends Component {
     const loss = Math.abs(this.props.loss);
     const gain = this.props.gain;
     const total = loss + gain;
-
-    console.log(loss, gain, total)
     return (
       <div className="bg">
         <XYPlot
