@@ -1,6 +1,7 @@
 
 *painfully* deployed at https://budget-clara.herokuapp.com/
 
+<hr/>
 <br/>
 
 Just a full-stack budgeting site to keep track of my expenses. 
